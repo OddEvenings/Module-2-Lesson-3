@@ -1,8 +1,14 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Relate Area to Addition and Multiplication</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Lexend:wght@400;500;600&display=swap">
 <style>
+[hidden]{display:none!important}
 /* Layout: one centered worksheet column on cool graph paper; a slide-out notepad drawer on the right. Tile colors from the lesson carry the visual system. */
 :root{
   --bg:#f3f6fb; --grid:#e3e9f3; --surface:#ffffff; --ink:#1d2433; --muted:#5a6477; --line:#d6dde9;
@@ -136,6 +142,9 @@ footer{margin-top:40px;display:flex;justify-content:space-between;gap:12px;flex-
 @media (max-width:480px){:root{--c:30px} body{font-size:17px} .card{padding:16px} .cardgrid{--c2:13px}}
 @media (prefers-reduced-motion:reduce){.meter span{transition:none}}
 </style>
+<style>body{margin:0}img{max-width:100%}</style>
+</head>
+<body>
 
 <div class="bar"><div class="bar-in">
   <strong id="score">0 of 9 correct</strong>
@@ -469,3 +478,6 @@ reset.addEventListener('click',()=>{
 });
 })();
 </script>
+
+</body>
+</html>
