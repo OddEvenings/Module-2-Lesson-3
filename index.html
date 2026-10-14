@@ -1,0 +1,471 @@
+<title>Relate Area to Addition and Multiplication</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Lexend:wght@400;500;600&display=swap">
+<style>
+/* Layout: one centered worksheet column on cool graph paper; a slide-out notepad drawer on the right. Tile colors from the lesson carry the visual system. */
+:root{
+  --bg:#f3f6fb; --grid:#e3e9f3; --surface:#ffffff; --ink:#1d2433; --muted:#5a6477; --line:#d6dde9;
+  --accent:#23408e; --accent-soft:#e6ecfa; --on-accent:#ffffff; --band:#e9762b; --row:#ffd84d;
+  --t-peach:#fbdcc4; --t-green:#d7ecd2; --t-purple:#e2d9f2; --t-blue:#d3eaf8; --t-yellow:#fbeeb0; --t-lilac:#ddd6ee;
+  --good:#23824f; --good-soft:#e2f4ea; --bad:#c3392f; --bad-soft:#fbe7e5; --talk:#fff6cf; --talk-line:#efd77a;
+  --font-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --font-body:"Lexend","Segoe UI",system-ui,sans-serif;
+  --c:38px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#11161f; --grid:#19202c; --surface:#1a2130; --ink:#e7ecf4; --muted:#9ba6ba; --line:#2d3748;
+  --accent:#93b2ff; --accent-soft:#232f4b; --on-accent:#0f1626; --band:#f08a45; --row:#8a7420;
+  --t-peach:#5e4130; --t-green:#2d4d33; --t-purple:#41385d; --t-blue:#24435a; --t-yellow:#5c5122; --t-lilac:#3f3858;
+  --good:#5fd394; --good-soft:#163627; --bad:#ff7d72; --bad-soft:#3a1d1c; --talk:#2c2814; --talk-line:#5e5221; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#11161f; --grid:#19202c; --surface:#1a2130; --ink:#e7ecf4; --muted:#9ba6ba; --line:#2d3748;
+  --accent:#93b2ff; --accent-soft:#232f4b; --on-accent:#0f1626; --band:#f08a45; --row:#8a7420;
+  --t-peach:#5e4130; --t-green:#2d4d33; --t-purple:#41385d; --t-blue:#24435a; --t-yellow:#5c5122; --t-lilac:#3f3858;
+  --good:#5fd394; --good-soft:#163627; --bad:#ff7d72; --bad-soft:#3a1d1c; --talk:#2c2814; --talk-line:#5e5221; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:18px;line-height:1.55;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px}
+.wrap{max-width:820px;margin:0 auto;padding-inline:16px;padding-block:0 110px}
+h1,h2{font-family:var(--font-display);text-wrap:balance;line-height:1.15;margin:0}
+h1{font-size:clamp(28px,6vw,40px);font-weight:800}
+h2{font-size:22px;font-weight:800;margin-top:40px;padding:8px 14px;border-radius:8px;background:var(--band);color:#fff;display:inline-block}
+p{margin:0}
+.eyebrow{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600}
+.ican{background:var(--accent-soft);border-radius:10px;padding:10px 14px}
+
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+.bar-in{max-width:820px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.meter{flex:1 1 160px;height:12px;border-radius:99px;background:var(--accent-soft);overflow:hidden}
+.meter span{display:block;height:100%;width:0;background:var(--good);transition:width .4s}
+.bar strong{font-variant-numeric:tabular-nums;font-size:16px}
+header.top{padding-block:28px 8px;display:grid;gap:12px}
+.name{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+
+input.n,input.t,input.name-in,textarea{font:inherit;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-radius:8px}
+input.n{width:3.6em;padding:4px 6px;text-align:center;font-weight:600;font-variant-numeric:tabular-nums}
+input.t{width:min(15em,100%);padding:4px 8px;font-weight:600}
+input.name-in{padding:6px 10px;width:min(280px,100%)}
+textarea{width:100%;min-height:84px;padding:10px;font-size:17px;resize:vertical}
+input:focus,textarea:focus,button:focus-visible,select:focus{outline:3px solid var(--accent);outline-offset:2px}
+input.ok,textarea.ok{border-color:var(--good);background:var(--good-soft)}
+input.no{border-color:var(--bad);background:var(--bad-soft)}
+button{font:inherit;font-size:16px;font-weight:600;border-radius:8px;cursor:pointer;padding:8px 16px;border:2px solid var(--accent)}
+button.primary{background:var(--accent);color:var(--on-accent)}
+button.ghost{background:transparent;color:var(--accent)}
+button.small{padding:4px 10px;font-size:14px}
+.drawbtn{display:inline-flex;align-items:center;gap:6px}
+.drawbtn svg{width:18px;height:18px}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;gap:14px;margin-top:16px;scroll-margin-top:64px}
+.card.solved{border-color:var(--good);box-shadow:0 0 0 2px var(--good-soft)}
+.qhead{display:flex;gap:12px;align-items:flex-start}
+.qnum{flex:none;min-width:36px;height:36px;padding:0 8px;border-radius:18px;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font-family:var(--font-display);font-weight:800;font-size:17px}
+.card.solved .qnum{background:var(--good)}
+.qtext{min-width:0;padding-top:4px}
+.line{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.sub{display:grid;gap:10px;padding-left:14px;border-left:3px solid var(--line)}
+.sub>b{color:var(--accent);font-family:var(--font-display)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.fb{font-weight:600;min-height:1.4em}
+.fb.good{color:var(--good)} .fb.bad{color:var(--bad)}
+.hint{background:var(--accent-soft);border-radius:8px;padding:10px 14px;font-size:16px}
+.talk{background:var(--talk);border:1px solid var(--talk-line);border-radius:12px;padding:12px 14px;display:grid;gap:8px}
+.talk b{font-family:var(--font-display);color:var(--ink)}
+.small-note{font-size:15px;color:var(--muted)}
+.unit{display:inline-flex;align-items:center;gap:6px;font-size:15px;color:var(--muted)}
+.unit i{display:inline-block;width:16px;height:16px;border:1.5px solid var(--ink);background:var(--fill,var(--t-blue))}
+
+/* choices */
+.choices{display:flex;gap:8px;flex-wrap:wrap}
+.choices button{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.choices button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.choices.ok button[aria-pressed="true"]{background:var(--good);border-color:var(--good);color:var(--on-accent)}
+.choices.no button[aria-pressed="true"]{background:var(--bad);border-color:var(--bad);color:#fff}
+
+/* grid figures */
+.figrow{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-end}
+.figbox{display:grid;gap:8px;justify-items:start;max-width:100%;overflow-x:auto;padding-bottom:2px}
+.figlabel{font-family:var(--font-display);font-weight:600}
+.fig{display:inline-grid;grid-template-columns:repeat(var(--cols),var(--c)) auto;grid-auto-rows:var(--c);padding:2px}
+.fig .sq{background:var(--fill);box-shadow:0 0 0 1px var(--ink);display:grid;place-items:center;font-weight:600;font-size:15px;color:var(--ink);font-variant-numeric:tabular-nums;cursor:pointer;position:relative}
+.fig .sq.lit{background:var(--row)}
+.fig .sq.dash{background:transparent;box-shadow:inset 0 0 0 1px var(--muted);cursor:default}
+.fig .sq.dash.show{background:var(--fill);box-shadow:0 0 0 1px var(--ink)}
+.fig .sq.counted::after{content:"";position:absolute;inset:4px;border:2px solid var(--accent);border-radius:50%}
+.fig .rl{padding-left:10px;display:flex;align-items:center;font-size:15px;font-weight:600;color:var(--accent);white-space:nowrap;font-variant-numeric:tabular-nums}
+.fig.mini{--c:24px}
+.fig.mini .sq{cursor:default}
+.figtools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:15px;color:var(--muted)}
+.cardgrid{position:relative;display:inline-grid;grid-template-columns:repeat(22,var(--c2));grid-auto-rows:var(--c2);--c2:24px;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:var(--c2) var(--c2);border:1px solid var(--line)}
+.cardgrid span.on{background:var(--t-peach);box-shadow:0 0 0 1px var(--ink)}
+.mat{display:grid;grid-template-columns:auto auto;grid-template-rows:auto auto;gap:6px 8px;align-items:center;justify-items:center}
+.mat .side{grid-row:1;grid-column:1}
+.mat .bottom{grid-row:2;grid-column:2}
+.mat .fig{grid-row:1;grid-column:2}
+
+.mindset{background:var(--accent);color:var(--on-accent);border-radius:12px;padding:14px 18px;margin-top:40px;font-family:var(--font-display);font-size:22px;font-weight:800}
+footer{margin-top:40px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:15px;align-items:center}
+
+/* notepad */
+.fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:20;display:inline-flex;align-items:center;gap:8px;
+  background:var(--accent);color:var(--on-accent);border-radius:999px;padding:12px 20px;font-size:17px;box-shadow:0 6px 18px rgba(0,0,0,.22)}
+.fab svg{width:22px;height:22px}
+.np{position:fixed;top:0;right:0;bottom:0;width:min(600px,100%);z-index:30;background:var(--surface);border-left:1px solid var(--line);
+  box-shadow:-10px 0 30px rgba(0,0,0,.2);display:flex;flex-direction:column;
+  padding:calc(12px + env(safe-area-inset-top,0px)) 16px calc(12px + env(safe-area-inset-bottom,0px));gap:10px;overflow-y:auto}
+.nphead{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.nphead h3{font-family:var(--font-display);font-size:22px;margin:0;flex:1}
+.nphead select{font:inherit;font-size:15px;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-radius:8px;padding:6px 8px;max-width:100%}
+.npprompt{font-size:15px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:8px 12px;max-height:7.5em;overflow:auto}
+.tools{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.tools .grp{display:flex;gap:4px;align-items:center;padding-right:8px;margin-right:2px;border-right:1px solid var(--line)}
+.tools .grp:last-child{border-right:0}
+.tools button{padding:5px 9px;font-size:14px;background:var(--surface);color:var(--ink);border-color:var(--line)}
+.tools button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--ink)}
+.tools .sw{width:30px;height:30px;padding:0;border-radius:50%;border:3px solid var(--surface);box-shadow:0 0 0 2px var(--line)}
+.tools .sw[aria-pressed="true"]{box-shadow:0 0 0 3px var(--accent)}
+.paper{position:relative;width:100%;aspect-ratio:10/8;border-radius:10px;overflow:hidden;border:2px solid var(--line);background-color:#fffdf7;flex:none}
+.paper.grid{background-image:linear-gradient(#cfe0f5 1px,transparent 1px),linear-gradient(90deg,#cfe0f5 1px,transparent 1px);background-size:5% 6.25%}
+.paper.lines{background-image:linear-gradient(transparent calc(100% - 1px),#b9cdea 1px);background-size:100% 10%}
+.paper canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair}
+.np textarea{min-height:90px;flex:none}
+@media (min-width:1100px){body.np-open .wrap,body.np-open .bar-in{margin-right:616px;margin-left:auto}}
+@media (max-width:480px){:root{--c:30px} body{font-size:17px} .card{padding:16px} .cardgrid{--c2:13px}}
+@media (prefers-reduced-motion:reduce){.meter span{transition:none}}
+</style>
+
+<div class="bar"><div class="bar-in">
+  <strong id="score">0 of 9 correct</strong>
+  <div class="meter" aria-hidden="true"><span id="meter"></span></div>
+</div></div>
+
+<main class="wrap">
+<header class="top">
+  <p class="eyebrow">Module 2 · Lesson 3 · Grade 3</p>
+  <h1>Relate Area to Addition and Multiplication</h1>
+  <p class="ican"><b>I can</b> use repeated addition or multiplication to find the area of a rectangle.</p>
+  <label class="name">Name <input id="studentName" class="name-in" autocomplete="off" placeholder="Type your name"></label>
+  <p class="small-note">Tip: tap <b>Draw &amp; write</b> on any problem, or the <b>Notepad</b> button, to show your work.</p>
+</header>
+
+<h2>Spark Your Learning</h2>
+<article class="card" data-q="spark" data-label="Spark" data-hint="Find the area of each design first. Count the squares in one row, then count the rows. Which area is more than 12?">
+  <div class="qhead"><span class="qnum">★</span><p class="qtext">Zenda draws three designs for a game board. She wants the game board to have an area <b>greater than 12 square centimeters</b>. Which design should Zenda use?</p></div>
+  <p class="small-note">Each unit square represents 1 square centimeter.</p>
+  <div class="figrow">
+    <div class="figbox"><span class="figlabel">Design A</span><div class="fig" data-rows="5" data-cols="2" data-color="t-peach"></div>
+      <div class="line">Area: <input class="n" id="sA" inputmode="numeric" data-num="10"> sq cm</div></div>
+    <div class="figbox"><span class="figlabel">Design B</span><div class="fig" data-rows="2" data-cols="7" data-color="t-green"></div>
+      <div class="line">Area: <input class="n" id="sB" inputmode="numeric" data-num="14"> sq cm</div></div>
+    <div class="figbox"><span class="figlabel">Design C</span><div class="fig" data-rows="3" data-cols="3" data-color="t-purple"></div>
+      <div class="line">Area: <input class="n" id="sC" inputmode="numeric" data-num="9"> sq cm</div></div>
+  </div>
+  <p>Which design has an area greater than 12 square centimeters?</p>
+  <div class="choices" data-for="sPick"><button type="button" data-v="A">Design A</button><button type="button" data-v="B">Design B</button><button type="button" data-v="C">Design C</button></div>
+  <input type="hidden" id="sPick" data-ans="B">
+  <div class="talk"><b>Turn and Talk</b><label for="sTalk">How did you find the area of each design?</label><textarea id="sTalk"></textarea></div>
+</article>
+
+<h2>Build Understanding</h2>
+<article class="card" data-q="q1" data-label="Problem 1" data-hint="Each drawing has 3 rows with 6 squares in each row. For addition, add 6 three times. For multiplication, multiply rows × squares in each row.">
+  <div class="qhead"><span class="qnum">1</span><p class="qtext">Monty uses unit squares to measure the area of a game card. Each unit square is 1 square inch. He makes the drawings below. What is the area of the game card? <b>Show two ways to find the area of the game card.</b></p></div>
+  <div class="figbox"><div class="cardgrid" id="cardgrid" role="img" aria-label="Two drawings of the same game card, each 6 unit squares long and 3 unit squares tall"></div>
+    <span class="unit" style="--fill:var(--t-peach)">1 <i></i> = 1 square inch</span></div>
+  <div class="sub"><b>A.</b><p>What unit of measurement does Monty use?</p>
+    <div class="choices" data-for="q1unit"><button type="button" data-v="in">square inches</button><button type="button" data-v="ft">square feet</button><button type="button" data-v="cm">square centimeters</button></div>
+    <input type="hidden" id="q1unit" data-ans="in"></div>
+  <div class="sub"><b>B.</b><p>What methods or operations can you use? Pick <b>two or more</b>.</p>
+    <div class="choices multi" data-for="q1meth"><button type="button" data-v="count">Count the squares</button><button type="button" data-v="add">Repeated addition</button><button type="button" data-v="mul">Multiplication</button></div>
+    <input type="hidden" id="q1meth"></div>
+  <div class="sub"><b>Show two ways</b>
+    <div class="line">Way 1, add: <input class="t" id="q1add" data-add="3,6" placeholder="like 2 + 2 + 2"></div>
+    <div class="line">Way 2, multiply: <input class="t" id="q1mul" data-mul="3,6" placeholder="like 2 × 3"></div></div>
+  <div class="sub"><b>C.</b><div class="line">The area of the game card is <input class="n" id="q1area" inputmode="numeric" data-num="18"> square inches.</div></div>
+  <div class="talk"><b>Turn and Talk</b><label for="q1talk">Can the way the unit squares are arranged in a rectangle help you find the area quickly? Explain.</label><textarea id="q1talk"></textarea></div>
+</article>
+
+<h2>Step It Out</h2>
+<article class="card" data-q="q2" data-label="Problem 2" data-hint="Each row has 4 squares. There are 5 rows. So you add 4 five times, or multiply 5 × 4.">
+  <div class="qhead"><span class="qnum">2</span><p class="qtext">Tami uses unit squares to measure the area of a floor mat. Each unit square is 1 square foot. What is the area of the mat?</p></div>
+  <div class="figbox"><div class="fig" data-rows="5" data-cols="4" data-color="t-yellow" data-rowcount="1"></div>
+    <span class="unit" style="--fill:var(--t-yellow)">1 <i></i> = 1 square foot</span></div>
+  <div class="sub"><b>A. Use repeated addition.</b>
+    <div class="line">What number do you add each time? <input class="n" id="q2each" inputmode="numeric" data-num="4"></div>
+    <div class="line">How many times do you add the same number? <input class="n" id="q2times" inputmode="numeric" data-num="5"></div>
+    <div class="line">Add. 4 + <input class="n" id="q2a1" inputmode="numeric" data-num="4"> + <input class="n" id="q2a2" inputmode="numeric" data-num="4"> + <input class="n" id="q2a3" inputmode="numeric" data-num="4"> + <input class="n" id="q2a4" inputmode="numeric" data-num="4"> = <input class="n" id="q2a5" inputmode="numeric" data-num="20"></div></div>
+  <div class="sub"><b>B. Use multiplication.</b>
+    <div class="line">How many rows are there? <input class="n" id="q2rows" inputmode="numeric" data-num="5"></div>
+    <div class="line">How many squares are in each row? <input class="n" id="q2per" inputmode="numeric" data-num="4"></div>
+    <p>Write the side lengths on the mat.</p>
+    <div class="figbox"><div class="mat">
+      <span class="side"><input class="n" id="q2side" inputmode="numeric" data-num="5" aria-label="Length of the left side"> ft</span>
+      <div class="fig mini" data-rows="5" data-cols="4" data-color="t-yellow"></div>
+      <span class="bottom"><input class="n" id="q2bottom" inputmode="numeric" data-num="4" aria-label="Length of the bottom side"> ft</span>
+    </div></div>
+    <div class="line">Multiply. <input class="n" id="q2m1" inputmode="numeric"> × <input class="n" id="q2m2" inputmode="numeric"> = <input class="n" id="q2m3" inputmode="numeric" data-num="20"></div>
+    <div class="line">The area of the mat is <input class="n" id="q2area" inputmode="numeric" data-num="20"> square feet.</div></div>
+  <div class="talk"><b>Turn and Talk</b><label for="q2talk">How are counting, repeated addition, and multiplication alike when you find the area of a rectangle?</label><textarea id="q2talk"></textarea></div>
+</article>
+
+<h2>Check Understanding</h2>
+<article class="card" data-q="c1" data-label="Check 1" data-hint="There are 3 rows with 5 squares in each row.">
+  <div class="qhead"><span class="qnum">C1</span><p class="qtext">Finn uses unit squares to measure the area of this figure. What is the area of the figure?</p></div>
+  <div class="figbox"><div class="fig" data-rows="3" data-cols="5" data-color="t-blue" data-rowcount="1"></div><span class="unit" style="--fill:var(--t-blue)">1 <i></i> = 1 square centimeter</span></div>
+  <div class="line">Add. <input class="t" id="c1add" data-add="3,5" placeholder="like 2 + 2 + 2"></div>
+  <div class="line">Multiply. <input class="t" id="c1mul" data-mul="3,5" placeholder="like 2 × 3"></div>
+  <div class="line">Area = <input class="n" id="c1area" inputmode="numeric" data-num="15"> square centimeters</div>
+</article>
+
+<article class="card" data-q="c2" data-label="Check 2" data-hint="There are 2 rows with 7 squares in each row.">
+  <div class="qhead"><span class="qnum">C2</span><p class="qtext">Avra uses unit squares to measure the area of this figure. What is the area of the figure?</p></div>
+  <div class="figbox"><div class="fig" data-rows="2" data-cols="7" data-color="t-green" data-rowcount="1"></div><span class="unit" style="--fill:var(--t-green)">1 <i></i> = 1 square inch</span></div>
+  <div class="line">Add. <input class="t" id="c2add" data-add="2,7" placeholder="like 2 + 2 + 2"></div>
+  <div class="line">Multiply. <input class="t" id="c2mul" data-mul="2,7" placeholder="like 2 × 3"></div>
+  <div class="line">Area = <input class="n" id="c2area" inputmode="numeric" data-num="14"> square inches</div>
+</article>
+
+<h2>On Your Own</h2>
+<article class="card" data-q="q3" data-label="Problem 3" data-hint="Count the squares in one row. Then count the rows. Multiply rows × squares in each row.">
+  <div class="qhead"><span class="qnum">3</span><p class="qtext"><b>Attend to Precision</b> Muyu uses unit squares to measure the area of a playground. Each unit square is 1 square meter. What is the area of the playground?</p></div>
+  <div class="figbox"><div class="fig" data-rows="4" data-cols="9" data-color="t-lilac" data-rowcount="1"></div><span class="unit" style="--fill:var(--t-lilac)">1 <i></i> = 1 square meter</span></div>
+  <div class="line">The area of the playground is <input class="n" id="q3area" inputmode="numeric" data-num="36"> square meters.</div>
+</article>
+
+<p style="margin-top:20px"><b>Find the area of the figure. Show repeated addition. Show multiplication.</b></p>
+
+<article class="card" data-q="q4" data-label="Problem 4" data-hint="There are 3 rows with 7 squares in each row.">
+  <div class="qhead"><span class="qnum">4</span><p class="qtext">Each unit square is 1 square foot.</p></div>
+  <div class="figbox"><div class="fig" data-rows="3" data-cols="7" data-color="t-yellow" data-rowcount="1"></div></div>
+  <div class="line">Add. <input class="t" id="q4add" data-add="3,7" placeholder="like 2 + 2 + 2"></div>
+  <div class="line">Multiply. <input class="t" id="q4mul" data-mul="3,7" placeholder="like 2 × 3"></div>
+  <div class="line">Area = <input class="n" id="q4area" inputmode="numeric" data-num="21"> square feet</div>
+</article>
+
+<article class="card" data-q="q5" data-label="Problem 5" data-hint="There are 2 rows with 8 squares in each row.">
+  <div class="qhead"><span class="qnum">5</span><p class="qtext">Each unit square is 1 square inch.</p></div>
+  <div class="figbox"><div class="fig" data-rows="2" data-cols="8" data-color="t-yellow" data-rowcount="1"></div></div>
+  <div class="line">Add. <input class="t" id="q5add" data-add="2,8" placeholder="like 2 + 2 + 2"></div>
+  <div class="line">Multiply. <input class="t" id="q5mul" data-mul="2,8" placeholder="like 2 × 3"></div>
+  <div class="line">Area = <input class="n" id="q5area" inputmode="numeric" data-num="16"> square inches</div>
+</article>
+
+<article class="card" data-q="q6" data-label="Problem 6" data-hint="He has 2 rows now and will add 4 more rows. 2 + 4 = 6 rows. Each row has 7 squares."
+  data-sample="Dev will have 2 + 4 = 6 rows in all. Each row has 7 unit squares. So he can multiply 6 × 7 = 42. The area is 42 square inches.">
+  <div class="qhead"><span class="qnum">6</span><p class="qtext"><b>Use Repeated Reasoning</b> Dev is measuring a rectangular figure using unit squares. Each unit square is 1 square inch. So far, he has made 2 rows with 7 unit squares in each row. He sees that there will be 4 more rows of 7. How can Dev use multiplication to find the area of the rectangle? Explain your thinking.</p></div>
+  <div class="figbox"><div class="fig" id="devfig" data-rows="6" data-cols="7" data-color="t-blue" data-done="2"></div>
+    <button type="button" class="ghost small" id="devshow">Show the 4 more rows</button></div>
+  <div class="line">How many rows in all? <input class="n" id="q6rows" inputmode="numeric" data-num="6"></div>
+  <div class="line">Multiply. <input class="t" id="q6mul" data-mul="6,7" placeholder="like 2 × 3"> = <input class="n" id="q6area" inputmode="numeric" data-num="42"> square inches</div>
+  <label for="q6w" class="eyebrow">Explain your thinking</label><textarea id="q6w"></textarea>
+</article>
+
+<div class="mindset">I'm in a Learning Mindset!</div>
+<article class="card" data-q="mind" data-label="Learning Mindset" data-open="1">
+  <label for="mindw">What parts of finding area am I comfortable solving on my own?</label>
+  <textarea id="mindw"></textarea>
+</article>
+
+<footer>
+  <span>Module 2 · Lesson 3 · Relate Area to Addition and Multiplication</span>
+  <button class="ghost" type="button" id="reset">Start over</button>
+</footer>
+</main>
+
+<button type="button" class="fab" id="npOpen" aria-controls="np"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 6l4 4" stroke="currentColor" stroke-width="2"/></svg>Notepad</button>
+
+<aside class="np" id="np" hidden role="dialog" aria-label="Notepad">
+  <div class="nphead">
+    <h3>Notepad</h3>
+    <select id="npPage" aria-label="Notepad page"></select>
+    <button type="button" class="ghost small" id="npClose">Close</button>
+  </div>
+  <p class="npprompt" id="npPrompt"></p>
+  <div class="tools" role="toolbar" aria-label="Drawing tools">
+    <div class="grp" id="npColors"></div>
+    <div class="grp"><button type="button" data-size="4" aria-pressed="true">Thin</button><button type="button" data-size="10" aria-pressed="false">Thick</button></div>
+    <div class="grp"><button type="button" id="npPen" aria-pressed="true">Pen</button><button type="button" id="npEraser" aria-pressed="false">Eraser</button></div>
+    <div class="grp"><button type="button" id="npUndo">Undo</button><button type="button" id="npClear">Clear page</button></div>
+    <div class="grp"><button type="button" data-paper="grid" aria-pressed="true">Grid</button><button type="button" data-paper="lines" aria-pressed="false">Lines</button><button type="button" data-paper="blank" aria-pressed="false">Blank</button></div>
+  </div>
+  <div class="paper grid" id="npPaper"><canvas id="npCanvas" width="1000" height="800" aria-label="Drawing space"></canvas></div>
+  <label for="npText" class="eyebrow">Type your thinking</label>
+  <textarea id="npText" placeholder="You can also type here…"></textarea>
+</aside>
+
+<script>
+(function(){
+const STORE='g3-m2l3-area-v1', NPKEY='g3-m2l3-np-';
+let saved={};try{saved=JSON.parse(localStorage.getItem(STORE)||'{}')||{}}catch(e){saved={}}
+const solved=new Set(Array.isArray(saved.__solved)?saved.__solved:[]);
+const TOTAL=9;
+function save(){try{const d={};document.querySelectorAll('main input[id],main textarea[id]').forEach(el=>{if(el.value)d[el.id]=el.value});d.__solved=[...solved];localStorage.setItem(STORE,JSON.stringify(d))}catch(e){}}
+const num=v=>{const m=String(v).match(/\d+/);return m?+m[0]:null};
+
+/* ---------- figures ---------- */
+document.querySelectorAll('.fig').forEach(fig=>{
+  const R=+fig.dataset.rows,C=+fig.dataset.cols,done=fig.dataset.done?+fig.dataset.done:R;
+  fig.style.setProperty('--cols',C);fig.style.setProperty('--fill','var(--'+fig.dataset.color+')');
+  let h='';for(let r=0;r<R;r++){for(let c=0;c<C;c++)h+='<span class="sq'+(r>=done?' dash':'')+'" data-r="'+r+'"></span>';h+='<span class="rl" data-rl="'+r+'"></span>'}
+  fig.innerHTML=h;fig.setAttribute('role','img');fig.setAttribute('aria-label',R+' rows of '+C+' unit squares');
+  if(fig.classList.contains('mini')||fig.dataset.done)return;
+  const tools=document.createElement('div');tools.className='figtools';
+  tools.innerHTML=(fig.dataset.rowcount?'<button type="button" class="ghost small" data-act="row">Count by rows</button>':'')+'<button type="button" class="ghost small" data-act="clear">Clear</button><span aria-live="polite">Tap squares to count them.</span>';
+  fig.parentNode.insertBefore(tools,fig.nextSibling);
+  const msg=tools.querySelector('span');let order=[],lit=0;
+  const paint=()=>{fig.querySelectorAll('.sq').forEach(s=>{const p=order.indexOf(s);s.classList.toggle('counted',p>-1);s.textContent=p>-1?p+1:'';s.classList.toggle('lit',+s.dataset.r<lit)});
+    fig.querySelectorAll('.rl').forEach(l=>{const r=+l.dataset.rl;l.textContent=r<lit?(r===0?C:'+'+C+' = '+C*(r+1)):''});
+    msg.textContent=lit?'You counted '+lit+' row'+(lit>1?'s':'')+' of '+C+'.':order.length?'You counted '+order.length+' square'+(order.length>1?'s':'')+'.':'Tap squares to count them.'};
+  fig.addEventListener('click',e=>{const s=e.target.closest('.sq');if(!s)return;const p=order.indexOf(s);p>-1?order.splice(p,1):order.push(s);paint()});
+  tools.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+    if(b.dataset.act==='row'){order=[];lit=lit>=R?0:lit+1}else{order=[];lit=0}paint()});
+  fig._clear=()=>{order=[];lit=0;paint()};
+});
+// Monty's two drawings on grid paper
+(function(){const g=document.getElementById('cardgrid');let h='';
+  for(let r=0;r<5;r++)for(let c=0;c<22;c++){const on=r>=1&&r<=3&&((c>=1&&c<=6)||(c>=11&&c<=16));h+='<span'+(on?' class="on"':'')+'></span>'}g.innerHTML=h})();
+const devBtn=document.getElementById('devshow');
+devBtn.addEventListener('click',()=>{const on=devBtn.dataset.on!=='1';devBtn.dataset.on=on?'1':'0';
+  document.querySelectorAll('#devfig .sq.dash').forEach(s=>s.classList.toggle('show',on));devBtn.textContent=on?'Hide the 4 more rows':'Show the 4 more rows'});
+
+/* ---------- choices ---------- */
+document.querySelectorAll('.choices').forEach(g=>{
+  const inp=document.getElementById(g.dataset.for),multi=g.classList.contains('multi');
+  const vals=()=>inp.value?inp.value.split(','):[];
+  const sync=()=>g.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',vals().includes(b.dataset.v)?'true':'false'));
+  g.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+    if(multi){const s=new Set(vals());s.has(b.dataset.v)?s.delete(b.dataset.v):s.add(b.dataset.v);inp.value=[...s].join(',')}else inp.value=b.dataset.v;
+    g.classList.remove('ok','no');sync();save()});
+  g._sync=sync;
+});
+
+/* ---------- expression checks ---------- */
+function checkAdd(s,R,C){
+  s=String(s).replace(/\s/g,'');if(!s)return 'Write an addition sentence.';
+  const [lhs,rhs]=s.split('=');
+  if(!/^\d+(\+\d+)+$/.test(lhs))return 'Write numbers with + between them, like 2 + 2 + 2.';
+  const p=lhs.split('+').map(Number),sum=p.reduce((a,b)=>a+b,0);
+  if(rhs!==undefined&&rhs!==''&&+rhs!==sum)return lhs.replace(/\+/g,' + ')+' is '+sum+', not '+rhs+'.';
+  if(!p.every(v=>v===p[0]))return 'Add the same number each time. Each row has the same number of squares.';
+  if(!((p[0]===C&&p.length===R)||(p[0]===R&&p.length===C)))return 'Your addition makes '+sum+'. Check how many squares are in each row and how many rows there are.';
+  return '';
+}
+function checkMul(s,R,C){
+  s=String(s).replace(/\s/g,'').replace(/[xX*]/g,'×');if(!s)return 'Write a multiplication sentence.';
+  const m=s.match(/^(\d+)×(\d+)(?:=(\d*))?$/);if(!m)return 'Write it like 2 × 3.';
+  const a=+m[1],b=+m[2];
+  if(m[3]&&+m[3]!==a*b)return a+' × '+b+' is '+a*b+', not '+m[3]+'.';
+  if(!((a===R&&b===C)||(a===C&&b===R)))return a+' × '+b+' = '+a*b+'. Use the number of rows and the number of squares in each row.';
+  return '';
+}
+
+/* ---------- restore ---------- */
+document.querySelectorAll('main input[id],main textarea[id]').forEach(el=>{if(saved[el.id]!=null)el.value=saved[el.id]});
+document.querySelectorAll('.choices').forEach(g=>g._sync());
+
+/* ---------- cards ---------- */
+const pencil='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 6l4 4" stroke="currentColor" stroke-width="2"/></svg>';
+document.querySelectorAll('.card[data-q]').forEach(card=>{
+  const q=card.dataset.q;
+  const act=document.createElement('div');act.className='actions';card.appendChild(act);
+  const draw=document.createElement('button');draw.type='button';draw.className='ghost drawbtn';draw.innerHTML=pencil+'Draw &amp; write';
+  draw.addEventListener('click',()=>openNp(q));
+  if(card.dataset.open){act.appendChild(draw);return}
+  act.innerHTML='<button type="button" class="primary">Check</button><button type="button" class="ghost">Hint</button>';act.appendChild(draw);
+  const fb=document.createElement('span');fb.className='fb';fb.setAttribute('aria-live','polite');act.appendChild(fb);
+  const hint=document.createElement('p');hint.className='hint';hint.hidden=true;hint.textContent=card.dataset.hint;card.appendChild(hint);
+  let sample;if(card.dataset.sample){sample=document.createElement('p');sample.className='hint';sample.hidden=true;sample.textContent='Sample answer: '+card.dataset.sample;card.appendChild(sample)}
+  const [chk,hb]=act.querySelectorAll('button');
+  hb.addEventListener('click',()=>{hint.hidden=!hint.hidden;hb.textContent=hint.hidden?'Hint':'Hide hint'});
+  chk.addEventListener('click',()=>{
+    let ok=true,msgs=[];
+    const mark=(el,good)=>{el.classList.toggle('ok',good);el.classList.toggle('no',!good);if(!good)ok=false};
+    card.querySelectorAll('input[data-num]').forEach(el=>mark(el,num(el.value)===+el.dataset.num));
+    card.querySelectorAll('input[data-add]').forEach(el=>{const [R,C]=el.dataset.add.split(',').map(Number),e=checkAdd(el.value,R,C);mark(el,!e);if(e)msgs.push(e)});
+    card.querySelectorAll('input[data-mul]').forEach(el=>{const [R,C]=el.dataset.mul.split(',').map(Number),e=checkMul(el.value,R,C);mark(el,!e);if(e)msgs.push(e)});
+    card.querySelectorAll('input[type="hidden"]').forEach(el=>{const g=card.querySelector('.choices[data-for="'+el.id+'"]');if(!g)return;
+      let good;if(g.classList.contains('multi'))good=el.value.split(',').filter(Boolean).length>=2;else good=el.value===el.dataset.ans;
+      g.classList.toggle('ok',good);g.classList.toggle('no',!good);if(!good){ok=false;if(!el.value)msgs.push('Pick an answer.');else if(g.classList.contains('multi'))msgs.push('Pick at least two methods.')}});
+    if(q==='q2'){const a=document.getElementById('q2m1'),b=document.getElementById('q2m2'),pair=[num(a.value),num(b.value)].sort((x,y)=>x-y).join();
+      const good=pair==='4,5';mark(a,good);mark(b,good);if(!good)msgs.push('Multiply the number of rows by the number of squares in each row.')}
+    if(ok){fb.className='fb good';fb.textContent='Correct! Great work.';solved.add(q);card.classList.add('solved');if(sample)sample.hidden=false}
+    else{fb.className='fb bad';fb.textContent='Not yet. '+(msgs[0]||'Fix the boxes marked in red, or tap Hint.')}
+    updateScore();save();
+  });
+  if(solved.has(q))card.classList.add('solved');
+});
+document.querySelector('main').addEventListener('input',e=>{if(e.target.matches('input,textarea')){e.target.classList.remove('ok','no');save()}});
+function updateScore(){const c=solved.size;document.getElementById('score').textContent=c+' of '+TOTAL+' correct';document.getElementById('meter').style.width=(c/TOTAL*100)+'%'}
+updateScore();
+
+/* ---------- notepad ---------- */
+const np=document.getElementById('np'),cv=document.getElementById('npCanvas'),ctx=cv.getContext('2d'),paper=document.getElementById('npPaper');
+const sel=document.getElementById('npPage'),promptEl=document.getElementById('npPrompt'),txt=document.getElementById('npText');
+const pages=[...document.querySelectorAll('.card[data-q]')].map(c=>({id:c.dataset.q,label:c.dataset.label,prompt:(c.querySelector('.qtext')||c.querySelector('label')||{}).textContent||''}));
+pages.push({id:'scratch',label:'Scratch paper',prompt:'Use this page for any extra work.'});
+sel.innerHTML=pages.map(p=>'<option value="'+p.id+'">'+p.label+'</option>').join('');
+const inks=['#1d2a6b','#d33a2c','#1f8a4c','#2a6fdb','#e08a00'];let color=inks[0],size=4,erase=false,page='scratch',undo=[],drawing=false,lx=0,ly=0,dirty=false;
+document.getElementById('npColors').innerHTML=inks.map((c,i)=>'<button type="button" class="sw" style="background:'+c+'" data-c="'+c+'" aria-label="Ink color '+(i+1)+'" aria-pressed="'+(i===0)+'"></button>').join('');
+const lsGet=k=>{try{return localStorage.getItem(k)}catch(e){return null}},lsSet=(k,v)=>{try{v==null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}};
+
+function loadPage(id){page=id;sel.value=id;undo=[];ctx.clearRect(0,0,cv.width,cv.height);
+  const p=pages.find(x=>x.id===id);promptEl.textContent=p.prompt;promptEl.hidden=!p.prompt;
+  txt.value=lsGet(NPKEY+'t-'+id)||'';
+  const d=lsGet(NPKEY+id);if(d){const im=new Image();im.onload=()=>{if(page===id)ctx.drawImage(im,0,0)};im.src=d}}
+function persist(){const blank=!ctx.getImageData(0,0,cv.width,cv.height).data.some((v,i)=>i%4===3&&v);lsSet(NPKEY+page,blank?null:cv.toDataURL('image/png'))}
+function openNp(id){np.hidden=false;document.body.classList.add('np-open');loadPage(id||page);document.getElementById('npOpen').hidden=true;document.getElementById('npClose').focus({preventScroll:true});
+  const c=document.querySelector('.card[data-q="'+page+'"]');if(c&&innerWidth>=1100)requestAnimationFrame(()=>c.scrollIntoView({block:'start'}))}
+function closeNp(){np.hidden=true;document.body.classList.remove('np-open');document.getElementById('npOpen').hidden=false;document.getElementById('npOpen').focus()}
+document.getElementById('npOpen').addEventListener('click',()=>{
+  // open on the problem nearest the middle of the screen
+  let best='scratch',bd=1e9;document.querySelectorAll('.card[data-q]').forEach(c=>{const r=c.getBoundingClientRect(),d=Math.abs((r.top+r.bottom)/2-innerHeight/2);if(r.bottom>0&&r.top<innerHeight&&d<bd){bd=d;best=c.dataset.q}});openNp(best)});
+document.getElementById('npClose').addEventListener('click',closeNp);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!np.hidden)closeNp()});
+sel.addEventListener('change',()=>{loadPage(sel.value);const c=document.querySelector('.card[data-q="'+page+'"]');if(c&&innerWidth>=1100)c.scrollIntoView({block:'start'})});
+txt.addEventListener('input',()=>lsSet(NPKEY+'t-'+page,txt.value||null));
+
+function pos(e){const r=cv.getBoundingClientRect();return [(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height]}
+cv.addEventListener('pointerdown',e=>{e.preventDefault();cv.setPointerCapture(e.pointerId);drawing=true;
+  if(undo.length>14)undo.shift();undo.push(ctx.getImageData(0,0,cv.width,cv.height));
+  [lx,ly]=pos(e);ctx.globalCompositeOperation=erase?'destination-out':'source-over';ctx.strokeStyle=color;ctx.fillStyle=color;
+  ctx.lineWidth=erase?size*5:size;ctx.lineCap='round';ctx.lineJoin='round';
+  ctx.beginPath();ctx.arc(lx,ly,ctx.lineWidth/2,0,Math.PI*2);ctx.fill();dirty=true});
+cv.addEventListener('pointermove',e=>{if(!drawing)return;const pts=e.getCoalescedEvents?e.getCoalescedEvents():[e];
+  pts.forEach(pe=>{const [x,y]=pos(pe);ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(x,y);ctx.stroke();lx=x;ly=y})});
+const end=()=>{if(!drawing)return;drawing=false;ctx.globalCompositeOperation='source-over';if(dirty){persist();dirty=false}};
+cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);cv.addEventListener('lostpointercapture',end);
+
+const tools=np.querySelector('.tools');
+tools.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.c){color=b.dataset.c;erase=false;tools.querySelectorAll('.sw').forEach(s=>s.setAttribute('aria-pressed',s===b));setTool()}
+  else if(b.dataset.size){size=+b.dataset.size;tools.querySelectorAll('[data-size]').forEach(s=>s.setAttribute('aria-pressed',s===b))}
+  else if(b.dataset.paper){paper.className='paper '+(b.dataset.paper==='blank'?'':b.dataset.paper);tools.querySelectorAll('[data-paper]').forEach(s=>s.setAttribute('aria-pressed',s===b));lsSet(NPKEY+'paper',b.dataset.paper)}
+  else if(b.id==='npPen'){erase=false;setTool()}
+  else if(b.id==='npEraser'){erase=true;setTool()}
+  else if(b.id==='npUndo'){const s=undo.pop();if(s){ctx.putImageData(s,0,0);persist()}}
+  else if(b.id==='npClear'){if(b.dataset.armed!=='1'){b.dataset.armed='1';b.textContent='Tap again to clear';setTimeout(()=>{b.dataset.armed='';b.textContent='Clear page'},3000);return}
+    b.dataset.armed='';b.textContent='Clear page';undo.push(ctx.getImageData(0,0,cv.width,cv.height));ctx.clearRect(0,0,cv.width,cv.height);persist()}
+});
+function setTool(){document.getElementById('npPen').setAttribute('aria-pressed',!erase);document.getElementById('npEraser').setAttribute('aria-pressed',erase);cv.style.cursor=erase?'cell':'crosshair'}
+const pp=lsGet(NPKEY+'paper');if(pp){const b=tools.querySelector('[data-paper="'+pp+'"]');if(b)b.click()}
+
+/* ---------- reset ---------- */
+const reset=document.getElementById('reset');let armed=null;
+reset.addEventListener('click',()=>{
+  if(!armed){reset.textContent='Tap again to clear all answers and drawings';armed=setTimeout(()=>{armed=null;reset.textContent='Start over'},3500);return}
+  clearTimeout(armed);armed=null;
+  try{Object.keys(localStorage).filter(k=>k===STORE||k.startsWith(NPKEY)).forEach(k=>localStorage.removeItem(k))}catch(e){}
+  saved={};solved.clear();
+  document.querySelectorAll('main input,main textarea').forEach(el=>{el.value='';el.classList.remove('ok','no')});
+  document.querySelectorAll('.choices').forEach(g=>{g.classList.remove('ok','no');g._sync()});
+  document.querySelectorAll('.fig').forEach(f=>f._clear&&f._clear());
+  document.querySelectorAll('.card').forEach(c=>c.classList.remove('solved'));
+  document.querySelectorAll('.fb').forEach(f=>{f.textContent='';f.className='fb'});
+  document.querySelectorAll('.card .hint').forEach(h=>h.hidden=true);
+  ctx.clearRect(0,0,cv.width,cv.height);txt.value='';
+  reset.textContent='Start over';updateScore();window.scrollTo({top:0});
+});
+})();
+</script>
